@@ -2,16 +2,16 @@
 #include <signals.hpp>
 #include <config.hpp>
 #include <stdio.h>
+#include <loginDialog.hpp>
 
 static struct wMain wMainCfg;
 
 int main(int argc, char** argv)
 {
-    GtkWidget* mainWindow, //Основное окно
-        *btnView,
-        *btnEdit;
+    GtkWidget *mainWindow,
+        *fixedLout;
 
-    GtkWidget *fixed;
+    char* name = new char[10];
 
     if (cfg_get("bcrm.conf", &wMainCfg) != 0)
     {
@@ -21,28 +21,22 @@ int main(int argc, char** argv)
 
     gtk_init(&argc, &argv); //Инициализируем GTK+
 
+    runLoginDialog(name, mainWindow);
+
     mainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(
-        GTK_WINDOW(mainWindow),
-        "Bright CRM");
-    gtk_window_set_default_size(
-        GTK_WINDOW(mainWindow),
-        wMainCfg.w,
-        wMainCfg.h);
+    gtk_window_set_title(GTK_WINDOW(mainWindow), "Bright CRM");
+    gtk_window_set_default_size(GTK_WINDOW(mainWindow),
+                                wMainCfg.w,
+                                wMainCfg.h);
+    gtk_container_set_border_width(GTK_CONTAINER(mainWindow), 20);
 
-    fixed = gtk_fixed_new();
-    gtk_container_add(GTK_CONTAINER(mainWindow),fixed);
+    fixedLout = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(mainWindow),fixedLout);
 
-    btnEdit = gtk_button_new_with_label("Изменение данных");
-    gtk_fixed_put(GTK_FIXED(fixed), btnEdit, 0, 0);
-
-    //btnView = gtk_button_new_with_label("Просмотр данных");
-
-    g_signal_connect(
-        mainWindow,
-        "destroy",
-        G_CALLBACK(sig_destroy_mainWindow),
-        NULL); //При закрытие окна вызываем sig_destroy_mainWindow()
+    g_signal_connect(mainWindow,
+                     "destroy",
+                     G_CALLBACK(sig_destroy_mainWindow),
+                     NULL); //При закрытие окна вызываем sig_destroy_mainWindow()
 
     gtk_widget_show_all(mainWindow);
 
@@ -50,3 +44,4 @@ int main(int argc, char** argv)
 
     return 0;
 }
+
