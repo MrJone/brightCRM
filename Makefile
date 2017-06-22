@@ -1,6 +1,7 @@
 CFLAGS=`pkg-config --cflags gtk+-3.0`
 CFLAGS+=-I`pwd`/include
-CFLAGS+=-mwindows
+CFLAGS+=-Wall
+CFLAGS_WIN=-mwindows
 LIBS=`pkg-config --libs gtk+-3.0`
 CC=g++
 

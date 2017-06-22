@@ -4,18 +4,11 @@
 #define WIN_H 200
 #define WIN_W 400
 
-struct _data{
-    GtkWidget* login;
-    GtkWidget* pass;
-};
-
-_data sigData;
 
 void runLoginDialog(char* _name, GtkWidget* _win_perent)
 {
     GtkWidget *window;
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_parent_window(window, GDK_WINDOW(_win_perent));
     gtk_window_set_modal(GTK_WINDOW(window), TRUE);
     gtk_window_set_title(GTK_WINDOW(window), "LogIn Bright CRM");
     gtk_window_set_default_size(GTK_WINDOW(window), WIN_W, WIN_H);
@@ -53,20 +46,19 @@ void runLoginDialog(char* _name, GtkWidget* _win_perent)
                   0,
                   130);
     gtk_window_set_focus(GTK_WINDOW(window), btnLogin);
-    sigData.login = textLogin;
-    sigData.pass = textPass;
     g_signal_connect(btnLogin,
                      "clicked",
                      G_CALLBACK(sig_click_btnLogin_loginDialog),
-                     window);
+                     _win_perent);
 
     gtk_widget_show_all(window);
 }
 
 void sig_click_btnLogin_loginDialog(GtkWidget* _widget, gpointer data)
 {
-    gtk_window_set_modal(GTK_WINDOW(GTK_WIDGET(data)), FALSE);
-    gtk_widget_hide(GTK_WIDGET(data));
+    gtk_widget_hide(gtk_widget_get_parent(gtk_widget_get_parent(_widget)));
+    gtk_widget_show_all(GTK_WIDGET(data));
+
     //TODO: авторизацию запилить
 }
 
